@@ -77,7 +77,6 @@ if uploaded_file is not None:
     df_raw = df.copy() # เก็บข้อมูลดิบไว้ใช้วิเคราะห์ตอนท้าย
 
     # ส่วนสำรวจข้อมูลดิบ (EDA)
-   
     st.header("1. การสำรวจข้อมูลพื้นฐาน (Data Exploration)")
     
     tab1, tab2 = st.tabs(["📋 ตารางข้อมูล", "📊 กราฟสรุปผล"])
@@ -112,18 +111,19 @@ if uploaded_file is not None:
     st.markdown("---")
 
     # การเตรียมข้อมูล (Preprocessing)
-    
     st.header("2. การเตรียมข้อมูล (Preprocessing)")
+    st.info("ℹ️ ระบบกำลังทำการแปลงข้อมูลข้อความ (Text) ให้เป็นตัวเลข (Numeric) เพื่อใช้ในการคำนวณ")
     
     if 'id' in df.columns:
         df = df.drop(columns=['id'])
     
-    col_trans1, col_trans2 = st.columns(2)
+    # กำหนดคอลัมน์
     categorical_cols = ['gender', 'country', 'diagnosis_date', 'cancer_stage', 
                         'family_history', 'smoking_status', 'treatment_type', 
                         'end_treatment_date']
     
     le = LabelEncoder()
+    # Loop แปลงข้อมูล
     for col in categorical_cols:
         if col in df.columns:
             df[col] = le.fit_transform(df[col].astype(str))
@@ -131,8 +131,27 @@ if uploaded_file is not None:
     if 'cancer_stage' in df.columns:
         df['cancer_stage'] = df['cancer_stage'] + 1
         
+    # --- แสดงตารางเปรียบเทียบ Before / After ---
+    col_trans1, col_trans2 = st.columns(2)
+    
     with col_trans1:
-        st.info("✅ แปลงข้อมูล Text เป็นตัวเลขเรียบร้อย")
+        st.markdown("#### 📄 ก่อนแปลง (Before Transform)")
+        # เลือกเฉพาะคอลัมน์ที่มีการแปลงเพื่อแสดงผลให้ชัดเจน
+        cols_to_show = [c for c in categorical_cols if c in df_raw.columns]
+        if cols_to_show:
+             st.dataframe(df_raw[cols_to_show].head(5))
+        else:
+             st.dataframe(df_raw.head(5))
+
+    with col_trans2:
+        st.markdown("#### 🔢 หลังแปลง (After Transform)")
+        cols_to_show = [c for c in categorical_cols if c in df.columns]
+        if cols_to_show:
+             st.dataframe(df[cols_to_show].head(5))
+        else:
+             st.dataframe(df.head(5))
+             
+    st.success("✅ แปลงข้อมูล Text เป็นตัวเลขเรียบร้อย")
 
     target_col = 'survived'
     if target_col in df.columns:
@@ -233,7 +252,7 @@ if uploaded_file is not None:
         st.header("6. วิเคราะห์เจาะลึกปัจจัยการรอดชีวิต (In-depth Survival Analysis)")
         st.markdown("ส่วนนี้วิเคราะห์ความสัมพันธ์ระหว่างตัวแปรต่างๆ กับการรอดชีวิต (จากข้อมูลจริง)")
 
-        # เตรียมข้อมูลสำหรับการ Plot (แปลง 0,1 เป็น Dead, Alive เพื่อใช้ใน Legend ภาษาอังกฤษ)
+        # เตรียมข้อมูลสำหรับการ Plot
         df_analysis = df_raw.copy()
         if 'survived' in df_analysis.columns:
             # ใช้ Label ภาษาอังกฤษสำหรับกราฟ
