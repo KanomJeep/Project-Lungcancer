@@ -1,0 +1,23 @@
+pip install streamlit pandas numpy matplotlib seaborn scikit-learn imbalanced-learn
+รายละเอียดหน้าที่ของแต่ละตัว:
+streamlit: ใช้สร้างหน้าเว็บ (Web Application) แสดงผลกราฟและปุ่มกดต่างๆ
+
+pandas: ใช้จัดการตารางข้อมูล (Dataframe) เช่น โหลดไฟล์ CSV, กรองข้อมูล
+
+numpy: ใช้สำหรับการคำนวณทางคณิตศาสตร์และจัดการอาร์เรย์ตัวเลข
+
+matplotlib: ใช้สร้างกราฟพื้นฐาน (ร่วมกับ Seaborn)
+
+seaborn: ใช้สร้างกราฟสวยงาม (เช่น Heatmap, Countplot)
+
+scikit-learn: (ในโค้ดคือ sklearn) เป็นหัวใจหลักของ Machine Learning ใช้ทำ:
+
+LabelEncoder: แปลงข้อความให้เป็นตัวเลข
+
+train_test_split: แบ่งข้อมูลสำหรับสอนและทดสอบ
+
+DecisionTreeClassifier, KNeighborsClassifier, GaussianNB: สร้างโมเดลทำนายผล
+
+accuracy_score, confusion_matrix: วัดความแม่นยำ
+
+imbalanced-learn: (ในโค้ดคือ imblearn) ใช้ทำ SMOTE เพื่อแก้ปัญหาข้อมูลไม่สมดุล (เพิ่มจำนวนข้อมูลในคลาสที่มีน้อย)
